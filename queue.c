@@ -57,7 +57,7 @@ bool q_insert_head(queue_t *q, char *s)
     char *d = malloc(strlen(s));
     if (d == NULL) {
         free(newh);
-        return NULL;
+        return false;
     }
     strncpy(d, s, strlen(s));
     /* Don't forget to allocate space for the string and copy it */
@@ -92,7 +92,7 @@ bool q_insert_tail(queue_t *q, char *s)
     char *d = malloc(strlen(s));
     if (d == NULL) {
         free(newt);
-        return NULL;
+        return false;
     }
     strncpy(d, s, strlen(s));
 
