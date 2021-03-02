@@ -54,12 +54,12 @@ bool q_insert_head(queue_t *q, char *s)
     if (newh == NULL)
         return false;
 
-    char *d = malloc(strlen(s));
+    char *d = malloc(strlen(s) + 1);
     if (d == NULL) {
         free(newh);
         return false;
     }
-    strncpy(d, s, strlen(s));
+    strncpy(d, s, strlen(s) + 1);
     /* Don't forget to allocate space for the string and copy it */
     /* What if either call to malloc returns NULL? */
     newh->value = d;
@@ -89,18 +89,20 @@ bool q_insert_tail(queue_t *q, char *s)
     if (newt == NULL)
         return false;
 
-    char *d = malloc(strlen(s));
+    char *d = malloc(strlen(s) + 1);
     if (d == NULL) {
         free(newt);
         return false;
     }
-    strncpy(d, s, strlen(s));
+    strncpy(d, s, strlen(s) + 1);
 
     newt->value = d;
     newt->next = NULL;
     q->size++;
     if (q->size == 1)
         q->head = newt;
+    else
+        q->tail->next = newt;
     q->tail = newt;
     return true;
 }
@@ -115,9 +117,21 @@ bool q_insert_tail(queue_t *q, char *s)
  */
 bool q_remove_head(queue_t *q, char *sp, size_t bufsize)
 {
-    /* TODO: You need to fix up this code. */
-    /* TODO: Remove the above comment when you are about to implement. */
+    if (q == NULL)
+        return false;
+    if (q->head == NULL)
+        return false;
+
+    if (sp != NULL) {
+        strncpy(sp, q->head->value, bufsize - 1);
+        sp[bufsize - 1] = '\0';
+    }
+
+    list_ele_t *tmp = q->head;
     q->head = q->head->next;
+    q->size--;
+    free(tmp->value);
+    free(tmp);
     return true;
 }
 
