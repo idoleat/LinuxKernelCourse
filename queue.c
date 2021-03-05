@@ -177,6 +177,66 @@ void q_reverse(queue_t *q)
  */
 void q_sort(queue_t *q)
 {
-    /* TODO: You need to write the code for this function */
-    /* TODO: Remove the above comment when you are about to implement. */
+    if (q == NULL)
+        return;
+    if (q->head == NULL || q->size == 1)
+        return;
+
+    merge_sort(q);
+}
+
+void merge_sort(queue_t *q)
+{
+    if (q->size < 2)
+        return;
+
+    queue_t *left = malloc(sizeof(queue_t));
+    queue_t *right = malloc(sizeof(queue_t));
+    left->head = q->head;
+    right->head = q->head;
+    left->size = q->size / 2;
+    right->size = q->size - left->size;
+    for (int i = 0; i < q->size / 2; i++) {
+        right->head = right->head->next;
+    }
+
+    merge_sort(left);
+    merge_sort(right);
+    q->head = merge(left->head, right->head);
+    free(left);
+    free(right);
+}
+
+/*
+ * mid points to the pointer of start element of right list
+ */
+list_ele_t *merge(list_ele_t *left, list_ele_t *right)
+{
+    list_ele_t *tmp = malloc(sizeof(list_ele_t));
+    list_ele_t *dummy_head = tmp;
+
+    if (tmp == NULL)
+        return NULL;
+
+    while (left != NULL && right != NULL) {
+        size_t L = strlen(left->value);
+        size_t R = strlen(right->value);
+        if (strncmp(left->value, right->value, L > R ? L : R) < 0) {
+            tmp->next = left;
+            tmp = tmp->next;
+            left = left->next;
+        } else {
+            tmp->next = right;
+            tmp = tmp->next;
+            right = right->next;
+        }
+    }
+
+    if (left != NULL)
+        tmp->next = left;
+    else
+        tmp->next = right;
+
+    free(tmp);
+    return dummy_head->next;
 }
