@@ -144,6 +144,9 @@ bool q_remove_head(queue_t *q, char *sp, size_t bufsize)
  */
 int q_size(queue_t *q)
 {
+    if (q == NULL)
+        return 0;
+
     return q->size;
 }
 
