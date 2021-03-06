@@ -25,6 +25,9 @@ void q_free(queue_t *q)
 {
     /* TODO: How about freeing the list elements and the strings? */
     /* => itterate through all the elements and free them */
+    if (q == NULL)
+        return;
+
     list_ele_t *it = q->head;
     while (it != NULL) {
         list_ele_t *next = it->next;
@@ -177,6 +180,66 @@ void q_reverse(queue_t *q)
  */
 void q_sort(queue_t *q)
 {
-    /* TODO: You need to write the code for this function */
-    /* TODO: Remove the above comment when you are about to implement. */
+    if (q == NULL)
+        return;
+    if (q->head == NULL || q->size == 1)
+        return;
+
+    q->head = merge_sort(q->head);
+    while (q->tail->next) {
+        q->tail = q->tail->next;
+    }
+}
+
+list_ele_t *merge_sort(list_ele_t *head)
+{
+    if (head == NULL || head->next == NULL)
+        return head;
+
+    list_ele_t *left = head, *right = head->next;  // try `right = head` later
+    while (right && right->next) {
+        left = left->next;
+        right = right->next->next;
+    }
+    right = left->next;
+    left->next = NULL;
+
+    return merge(merge_sort(head), merge_sort(right));
+}
+
+list_ele_t *merge(list_ele_t *left, list_ele_t *right)
+{
+    list_ele_t *head = NULL, *currrent = NULL;
+
+    // attach head
+    size_t LL = strlen(left->value);
+    size_t RR = strlen(right->value);
+    if (strncmp(left->value, right->value, LL > RR ? LL : RR) < 0) {
+        currrent = left;
+        left = left->next;
+    } else {
+        currrent = right;
+        right = right->next;
+    }
+    head = currrent;
+
+    while (left != NULL && right != NULL) {
+        size_t L = strlen(left->value);
+        size_t R = strlen(right->value);
+        if (strncmp(left->value, right->value, L > R ? L : R) < 0) {
+            currrent->next = left;
+            left = left->next;
+        } else {
+            currrent->next = right;
+            right = right->next;
+        }
+        currrent = currrent->next;
+    }
+
+    if (left != NULL)
+        currrent->next = left;
+    else
+        currrent->next = right;
+
+    return head;
 }

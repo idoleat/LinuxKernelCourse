@@ -93,4 +93,17 @@ void q_reverse(queue_t *q);
  */
 void q_sort(queue_t *q);
 
+/*
+ * The sort method used in q_sort.
+ * Depends on the merge functoin below to merge two list.
+ * The head of sorted list is returned.
+ */
+list_ele_t *merge_sort(list_ele_t *list);
+
+/*
+ * Merge two sorted list together into a list. The list will
+ * remain sorted. The head of merged list is returned.
+ */
+list_ele_t *merge(list_ele_t *left, list_ele_t *right);
+
 #endif /* LAB0_QUEUE_H */
