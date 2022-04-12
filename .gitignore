@@ -6,3 +6,4 @@ qtest
 .devcontainer
 core*
 .cmd_history
+.ccls-cache
