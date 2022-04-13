@@ -7,3 +7,4 @@ qtest
 core*
 .cmd_history
 .ccls-cache
+.gdb_history
