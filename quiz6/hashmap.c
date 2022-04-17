@@ -97,7 +97,7 @@ bool hashmap_put(hashmap_t *map, const void *key, void *value)
                 /* replace this link, assuming it has not changed by another
                  * thread
                  */
-                if (__atomic_compare_exchange(KKKK, &kv, &next, false,
+                if (__atomic_compare_exchange(&prev->next, &kv, &next, false,
                                               __ATOMIC_SEQ_CST,
                                               __ATOMIC_SEQ_CST)) {
                     /* this node, key and value are never again used by this */
@@ -109,7 +109,7 @@ bool hashmap_put(hashmap_t *map, const void *key, void *value)
                 /* set the head of the list to be whatever this node points to
                  * (NULL or other links)
                  */
-                if (__atomic_compare_exchange(QQQQ, &kv,
+                if (__atomic_compare_exchange(&map->buckets[bucket_index], &kv,
                                               &next, false, __ATOMIC_SEQ_CST,
                                               __ATOMIC_SEQ_CST)) {
                     map->destroy_node(map->opaque, kv);
@@ -168,7 +168,7 @@ bool hashmap_del(hashmap_t *map, const void *key)
 
         /* previous means this not the head but a link in the list */
         if (prev) { /* try the delete but fail if another thread did delete */
-            if (__atomic_compare_exchange(ZZZZ, &match, &match->next,
+            if (__atomic_compare_exchange(&prev->next, &match, &match->next,
                                           false, __ATOMIC_SEQ_CST,
                                           __ATOMIC_SEQ_CST)) {
                 __atomic_fetch_sub(&map->length, 1, __ATOMIC_SEQ_CST);
