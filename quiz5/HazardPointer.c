@@ -237,7 +237,7 @@ void cleanup(domain_t *dom, int flags)
 #include <pthread.h>
 #include <stdio.h>
 
-#define N_READERS 1
+#define N_READERS 5
 #define N_WRITERS 1
 #define N_ITERS 20
 #define ARRAY_SIZE(x) sizeof(x) / sizeof(*x)
@@ -312,7 +312,7 @@ static void *writer_thread(void *arg)
         print_config("updating config", new_config);
 
         swap(config_dom, (uintptr_t *) &shared_config, (uintptr_t) new_config,
-             0);
+             1);
         print_config("updated config ", new_config);
     }
 
