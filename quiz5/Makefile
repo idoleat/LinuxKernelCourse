@@ -1,5 +1,5 @@
 all:
-	gcc ./HazardPointer.c -o ./hp -Wall -lpthread
+	gcc ./HazardPointer.c -o ./hp -Wall  -lpthread
 
 clean:
 	rm ./hp
